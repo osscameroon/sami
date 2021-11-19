@@ -1,7 +1,7 @@
 #!/bin/bash
 
-USAGE="./deploy.sh <deploment_directory>
-Example: ./deploy.sh /Users/user_name/deployments/services
+USAGE="./stop.sh <deploment_directory>
+Example: ./dep.loy.sh /Users/user_name/deployments/services
 The deploment_directory should not end with a \"/\""
 
 DEPLOY_DIR=$1
@@ -22,7 +22,7 @@ echo "DEPLOY_SERVICE_DIR: $DEPLOY_SERVICE_DIR"
 ls $DEPLOY_SERVICE_DIR
 ls $DEPLOY_CONF_DIR
 
-echo "Start deployment..."
+echo "Stop deployments..."
 cd $DEPLOY_SERVICE_DIR
 DOCKER_COMPOSE_FILES="$(find . -name "docker-compose.*")"
 echo "DOCKER_COMPOSE_FILES:"
