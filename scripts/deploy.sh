@@ -24,11 +24,18 @@ ls $DEPLOY_CONF_DIR
 
 echo "Start deployment..."
 cd $DEPLOY_SERVICE_DIR
-DOCKER_COMPOSE_FILES="$(find . -name "docker-compose.*")"
+DOCKER_COMPOSE_FILES="$(find . -regex ".*-compose\.\(yml\|yaml\)")"
 echo "DOCKER_COMPOSE_FILES:"
 echo "$DOCKER_COMPOSE_FILES"
 
+DOCKER_STACK_FILES="$(find . -regex ".*-stack\.\(yml\|yaml\)")"
+echo "DOCKER_STACK:"
+echo "$DOCKER_STACK_FILES"
+
 for file in $DOCKER_COMPOSE_FILES; do
-	set -x
 	docker-compose -f "$file" up -d
+done
+
+for file in $DOCKER_STACK_FILES; do
+	docker stack deploy -c "$file" $(echo "$file" | cut -d "/" -f 2)
 done

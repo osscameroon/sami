@@ -1,7 +1,7 @@
 #!/bin/bash
 
 USAGE="./stop.sh <deploment_directory>
-Example: ./dep.loy.sh /Users/user_name/deployments/services
+Example: ./stop.sh /Users/user_name/deployments/services
 The deploment_directory should not end with a \"/\""
 
 DEPLOY_DIR=$1
@@ -24,11 +24,19 @@ ls $DEPLOY_CONF_DIR
 
 echo "Stop deployments..."
 cd $DEPLOY_SERVICE_DIR
-DOCKER_COMPOSE_FILES="$(find . -name "docker-compose.*")"
+DOCKER_COMPOSE_FILES="$(find . -regex ".*-compose\.\(yml\|yaml\)")"
 echo "DOCKER_COMPOSE_FILES:"
 echo "$DOCKER_COMPOSE_FILES"
+
+DOCKER_STACK_FILES="$(find . -regex ".*-stack\.\(yml\|yaml\)")"
+echo "DOCKER_STACK:"
+echo "$DOCKER_STACK_FILES"
 
 for file in $DOCKER_COMPOSE_FILES; do
 	set -x
 	docker-compose -f "$file" down
+done
+
+for file in $DOCKER_STACK_FILES; do
+	docker stack rm $(echo "$file" | cut -d "/" -f 2)
 done
