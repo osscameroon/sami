@@ -36,4 +36,8 @@ echo "FILE_NAME: $FILE_NAME"
 echo "PATCH_VALUE: $PATCH_VALUE"
 echo "FILE_FULL_PATH: $FILE_FULL_PATH"
 
+#Test that the patch works
+ yq eval "$PATCH_FIELD = \"$PATCH_VALUE\"" $FILE_FULL_PATH
+
+#Run the patch in place
  yq eval -i "$PATCH_FIELD = \"$PATCH_VALUE\"" $FILE_FULL_PATH
