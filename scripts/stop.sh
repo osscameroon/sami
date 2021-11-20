@@ -1,7 +1,7 @@
 #!/bin/bash
 
 USAGE="./stop.sh <deploment_directory>
-Example: ./stop.sh /Users/user_name/deployments/services
+Example: ./stop.sh /Users/user_name/deployments
 The deploment_directory should not end with a \"/\""
 
 DEPLOY_DIR=$1
