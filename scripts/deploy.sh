@@ -22,6 +22,11 @@ echo "DEPLOY_SERVICE_DIR: $DEPLOY_SERVICE_DIR"
 ls $DEPLOY_SERVICE_DIR
 ls $DEPLOY_CONF_DIR
 
+#update the repository
+cd $DEPLOY_SERVICE_DIR
+git pull --rebase origin main
+cd -
+
 echo "Start deployment..."
 cd $DEPLOY_SERVICE_DIR
 DOCKER_COMPOSE_FILES="$(find . -regex ".*-compose\.\(yml\|yaml\)")"
