@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/go-git/go-git/v5"
@@ -15,7 +17,7 @@ func main() {
 
 	switch command := os.Args[1]; command {
 	case "deploy":
-		println("[-] sammy deploy... ")
+		println("[-] sammy deploy command... ")
 		dir := os.Args[2]
 		deploy(dir)
 	case "restart-nginx":
@@ -32,7 +34,6 @@ func main() {
 }
 
 func deploy(dir string) {
-
 	println("[>] DEPLOY_DIR : " + dir)
 	if _, err := os.Stat(dir); err != nil {
 		if os.IsNotExist(err) {
@@ -45,6 +46,23 @@ func deploy(dir string) {
 			return
 		}
 	}
+
+	listDeployFolders(dir)
+
+	gitPull(dir)
+
+	// We run the docker-compose here
+	for _, p := range getDockerComposeFiles(dir) {
+		exec.Command("docker-compose", "-f "+p+" up -d")
+	}
+
+	// we run the docker stack deploy here
+	for _, p := range getDockerStackFiles(dir) {
+		exec.Command("docker stack deploy", "-c "+p)
+	}
+}
+
+func listDeployFolders(dir string) {
 	servicesDir := dir + "/services"
 	confDir := dir + "/conf"
 
@@ -53,9 +71,37 @@ func deploy(dir string) {
 
 	println("[>] SERVICE_DIR " + servicesDir)
 	listContent(servicesDir)
+}
 
+func getDockerComposeFiles(dir string) []string {
+	return findFile(dir, []string{"*-compose.yml", "*-compose.yaml"})
+}
+
+func getDockerStackFiles(dir string) []string {
+	return findFile(dir, []string{"*-stack.yml", "*-stack.yaml"})
+}
+
+func findFile(targetDir string, pattern []string) []string {
+	result := []string{}
+
+	for _, v := range pattern {
+		matches, err := filepath.Glob(targetDir + v)
+
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		if len(matches) != 0 {
+			fmt.Println("Found : ", matches)
+			result = append(result, matches...)
+		}
+	}
+	return result
+}
+
+func gitPull(targetDir string) {
 	// We instantiate a new repository targeting the given path (the .git folder)
-	r, err := git.PlainOpen(dir)
+	r, err := git.PlainOpen(targetDir)
 	if err != nil {
 		println(err)
 	}
