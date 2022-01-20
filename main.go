@@ -41,8 +41,7 @@ func deploy(dir string) {
 			println(err)
 			return
 		} else {
-			println("[x] ERR: Unexpected error occured for the dir: " + dir)
-			println(err)
+			fmt.Printf("Error: unexpected error occurred for %s: %s\n", dir, err)
 			return
 		}
 	}
