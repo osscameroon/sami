@@ -118,7 +118,7 @@ func gitPull(targetDir string) {
 }
 
 func listContent(stringPath string) {
-	err2 := filepath.Walk(stringPath,
+	err := filepath.Walk(stringPath,
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
