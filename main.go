@@ -79,7 +79,7 @@ func getDockerStackFiles(dir string) []string {
 	return findFile(dir, []string{"*-stack.yml", "*-stack.yaml"})
 }
 
-func findFile(targetDir string, pattern []string) []string {
+func findFiles(targetDir string, pattern []string) []string {
 	result := []string{}
 
 	for _, v := range pattern {
