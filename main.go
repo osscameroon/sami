@@ -89,7 +89,7 @@ func findFiles(targetDir string, pattern []string) []string {
 		}
 
 		if len(matches) != 0 {
-			fmt.Println("Found : ", matches)
+			fmt.Println("Found: ", matches)
 			result = append(result, matches...)
 		}
 	}
