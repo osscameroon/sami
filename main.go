@@ -64,7 +64,7 @@ func listDeployFolders(dir string) {
 	servicesDir := dir + "/services"
 	confDir := dir + "/conf"
 
-	println("[>] CONF_DIR " + confDir)
+	fmt.Printf("Config folder %s\n", confDir)
 	listContent(confDir)
 
 	println("[>] SERVICE_DIR " + servicesDir)
