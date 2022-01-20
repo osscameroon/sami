@@ -37,8 +37,7 @@ func deploy(dir string) {
 	fmt.Printf("Deploying %s\n", dir)
 	if _, err := os.Stat(dir); err != nil {
 		if os.IsNotExist(err) {
-			println("[x] ERR: " + dir + " doesn't exist.")
-			println(err)
+			fmt.Printf("Error: %s: %s\n", dir, err)
 			return
 		} else {
 			fmt.Printf("Error: unexpected error occurred for %s: %s\n", dir, err)
