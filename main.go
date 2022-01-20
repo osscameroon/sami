@@ -84,7 +84,6 @@ func findFile(targetDir string, pattern []string) []string {
 
 	for _, v := range pattern {
 		matches, err := filepath.Glob(targetDir + v)
-
 		if err != nil {
 			fmt.Println(err)
 		}
