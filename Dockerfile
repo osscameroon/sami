@@ -1,5 +1,5 @@
 # ---- 
-# bui# ld executable binary
+# build executable binary
 FROM golang:latest as builder
 
 WORKDIR $GOPATH/src/github.com/osscameroon/
