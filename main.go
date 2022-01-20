@@ -128,8 +128,8 @@ func listContent(stringPath string) {
 			}
 			return nil
 		})
-	if err2 != nil {
-		println(err2)
+	if err != nil {
+		fmt.Printf("Error: failed to list content: %s\n", err)
 	}
 }
 
