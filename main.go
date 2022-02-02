@@ -47,19 +47,19 @@ func proceedCommand(command []string) {
 	}
 }
 
+//throwError will throw an error message and exit depending on the given status code
 func throwError(err string, statusCode int) {
-	fmt.Printf("[x] Error: %s", err)
-	fmt.Println()
-
 	if statusCode == 1 {
-		log.Fatal(err)
+		log.Fatal("[x] Error: " + err)
 	} else if statusCode == 0 {
-		log.Println(err)
+		log.Println("[x] Error: " + err)
 	}
 	os.Exit(statusCode)
 }
 
+//execCommand will execute a command with provided program and arguments
 func execCommand(program string, args string) {
+	fmt.Println("[-] Exec: " + program + " " + args)
 	cmd := exec.Command(program, args)
 
 	err := cmd.Run()
