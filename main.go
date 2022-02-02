@@ -56,6 +56,16 @@ func throwError(err string, statusCode int) {
 	os.Exit(statusCode)
 }
 
+func execCommand(program string, args string) {
+	cmd := exec.Command(program, args)
+
+	err := cmd.Run()
+
+	if err != nil {
+		log.Println(err)
+	}
+}
+
 func deploy(dir string) {
 	fmt.Printf("Deploying %s\n", dir)
 	if _, err := os.Stat(dir); err != nil {
@@ -72,12 +82,12 @@ func deploy(dir string) {
 
 	// We run the docker-compose here
 	for _, p := range getDockerComposeFiles(dir) {
-		exec.Command("docker-compose", "-f "+p+" up -d")
+		execCommand("docker-compose", "-f "+p+" up -d")
 	}
 
 	// we run the docker stack deploy here
 	for _, p := range getDockerStackFiles(dir) {
-		exec.Command("docker stack deploy", "-c "+p)
+		execCommand("docker stack deploy", "-c "+p)
 	}
 }
 
