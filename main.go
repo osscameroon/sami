@@ -67,16 +67,16 @@ func listDeployFolders(dir string) {
 	fmt.Printf("Config folder %s\n", confDir)
 	listContent(confDir)
 
-	fmt.Println("Services folder %s\n", servicesDir)
+	fmt.Printf("Services folder %s\n", servicesDir)
 	listContent(servicesDir)
 }
 
 func getDockerComposeFiles(dir string) []string {
-	return findFile(dir, []string{"*-compose.yml", "*-compose.yaml"})
+	return findFiles(dir, []string{"*-compose.yml", "*-compose.yaml"})
 }
 
 func getDockerStackFiles(dir string) []string {
-	return findFile(dir, []string{"*-stack.yml", "*-stack.yaml"})
+	return findFiles(dir, []string{"*-stack.yml", "*-stack.yaml"})
 }
 
 func findFiles(targetDir string, pattern []string) []string {
@@ -85,7 +85,7 @@ func findFiles(targetDir string, pattern []string) []string {
 	for _, v := range pattern {
 		matches, err := filepath.Glob(targetDir + v)
 		if err != nil {
-			fmt.Printf("Error: failed to find files: %s\n"err)
+			fmt.Printf("Error: failed to find files: %s\n", err)
 		}
 
 		if len(matches) != 0 {
