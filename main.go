@@ -69,6 +69,7 @@ func execCommand(program string, args string) {
 	}
 }
 
+//deploy is the deployment method that will pull the given repo and execute dockers command
 func deploy(dir string) {
 	fmt.Printf("Deploying %s\n", dir)
 	if _, err := os.Stat(dir); err != nil {
@@ -94,6 +95,7 @@ func deploy(dir string) {
 	}
 }
 
+//listDeployFolders is an util function to print the content of the config dir and the service dir
 func listDeployFolders(dir string) {
 	servicesDir := dir + "/services"
 	confDir := dir + "/conf"
@@ -105,14 +107,17 @@ func listDeployFolders(dir string) {
 	listContent(servicesDir)
 }
 
+// getDockerComposeFiles will use findFiles to return all docker-compose files
 func getDockerComposeFiles(dir string) []string {
 	return findFiles(dir, []string{"*-compose.yml", "*-compose.yaml"})
 }
 
+//getDockerStackFiles will use findFiles to return all docker-stack files
 func getDockerStackFiles(dir string) []string {
 	return findFiles(dir, []string{"*-stack.yml", "*-stack.yaml"})
 }
 
+//findFiles is an util function that will search in the tree of a directory for files matching a pattern
 func findFiles(targetDir string, pattern []string) []string {
 	result := []string{}
 
@@ -130,6 +135,7 @@ func findFiles(targetDir string, pattern []string) []string {
 	return result
 }
 
+//gitPull will pull recent changes from the current dir
 func gitPull(targetDir string) {
 	// We instantiate a new repository targeting the given path (the .git folder)
 	r, err := git.PlainOpen(targetDir)
@@ -150,6 +156,7 @@ func gitPull(targetDir string) {
 	}
 }
 
+//listContent will just list the content of a given directory
 func listContent(stringPath string) {
 	err := filepath.Walk(stringPath,
 		func(path string, info os.FileInfo, err error) error {
@@ -166,6 +173,7 @@ func listContent(stringPath string) {
 	}
 }
 
+//helperFunc is an util function to list available commands
 func helperFunc() {
 	fmt.Println("\nEx: use sammy...")
 }
