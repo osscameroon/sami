@@ -24,6 +24,7 @@ func main() {
 				deploy(command[2])
 			} else {
 				throwError("No Directory provided !", 1)
+				helperFunc()
 			}
 		case "restart-nginx":
 			fmt.Println("[-] sammy restart-nginx command...")
@@ -33,15 +34,16 @@ func main() {
 			fmt.Println("[-] sammy update-field command...")
 		default:
 			throwError("No valid command provided...", 0)
+			helperFunc()
 		}
 	} else {
 		throwError("No command provided", 0)
+		helperFunc()
 	}
 }
 
 func throwError(err string, statusCode int) {
-	fmt.Printf("[x] %s", err)
-	helperFunc()
+	fmt.Printf("[x] Error: %s", err)
 	os.Exit(statusCode)
 }
 
@@ -50,11 +52,9 @@ func deploy(dir string) {
 	fmt.Printf("Deploying %s\n", dir)
 	if _, err := os.Stat(dir); err != nil {
 		if os.IsNotExist(err) {
-			fmt.Printf("Error: %s: %s\n", dir, err)
-			return
+			throwError("Directory '"+dir+"' not found : "+err.Error(), 1)
 		} else {
-			fmt.Printf("Error: unexpected error occurred for %s: %s\n", dir, err)
-			return
+			throwError(dir+" : "+err.Error(), 1)
 		}
 	}
 
@@ -98,7 +98,7 @@ func findFiles(targetDir string, pattern []string) []string {
 	for _, v := range pattern {
 		matches, err := filepath.Glob(targetDir + v)
 		if err != nil {
-			fmt.Printf("Error: failed to find files: %s\n", err)
+			throwError("failed to find files: "+err.Error(), 1)
 		}
 
 		if len(matches) != 0 {
@@ -141,7 +141,7 @@ func listContent(stringPath string) {
 			return nil
 		})
 	if err != nil {
-		fmt.Printf("Error: failed to list content: %s\n", err)
+		throwError("failed to list content: "+err.Error(), 1)
 	}
 }
 
