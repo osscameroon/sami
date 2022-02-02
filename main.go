@@ -10,30 +10,43 @@ import (
 )
 
 func main() {
-	if len(os.Args) == 0 {
-		println("[x] No command provided")
-		return
-	}
 
-	switch command := os.Args[1]; command {
-	case "deploy":
-		println("[-] sammy deploy command... ")
-		dir := os.Args[2]
-		deploy(dir)
-	case "restart-nginx":
-		println("[-] sammy restart-nginx command...")
-	case "stop":
-		println("[-] sammy stop command...")
-	case "update-field":
-		println("[-] sammy update-field command...")
-	default:
-		println("[x] No valid command provided...")
-		helperFunc()
-	}
+	command := os.Args
 
+	if len(command) > 1 {
+		switch command[1] {
+		case "help":
+			helperFunc()
+		case "h":
+			helperFunc()
+		case "deploy":
+			if len(command) > 2 {
+				deploy(command[2])
+			} else {
+				throwError("No Directory provided !", 1)
+			}
+		case "restart-nginx":
+			fmt.Println("[-] sammy restart-nginx command...")
+		case "stop":
+			fmt.Println("[-] sammy stop command...")
+		case "update-field":
+			fmt.Println("[-] sammy update-field command...")
+		default:
+			throwError("No valid command provided...", 0)
+		}
+	} else {
+		throwError("No command provided", 0)
+	}
+}
+
+func throwError(err string, statusCode int) {
+	fmt.Printf("[x] %s", err)
+	helperFunc()
+	os.Exit(statusCode)
 }
 
 func deploy(dir string) {
+	fmt.Println("[-] sammy deploy command... ")
 	fmt.Printf("Deploying %s\n", dir)
 	if _, err := os.Stat(dir); err != nil {
 		if os.IsNotExist(err) {
