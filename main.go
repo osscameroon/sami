@@ -44,6 +44,7 @@ func main() {
 
 func throwError(err string, statusCode int) {
 	fmt.Printf("[x] Error: %s", err)
+	fmt.Println()
 	os.Exit(statusCode)
 }
 
@@ -113,19 +114,19 @@ func gitPull(targetDir string) {
 	// We instantiate a new repository targeting the given path (the .git folder)
 	r, err := git.PlainOpen(targetDir)
 	if err != nil {
-		println(err)
+		fmt.Println(err)
 	}
 	// Get the working directory for the repository
 	w, err := r.Worktree()
 	if err != nil {
-		println(err)
+		fmt.Println(err)
 	}
 
 	// Pull the latest changes from the origin remote and merge into the current branch
-	println("git pull origin")
+	fmt.Println("git pull origin")
 	err = w.Pull(&git.PullOptions{RemoteName: "origin"})
 	if err != nil {
-		println(err)
+		fmt.Println(err)
 	}
 }
 
@@ -136,7 +137,7 @@ func listContent(stringPath string) {
 				return err
 			}
 			if path != stringPath {
-				println("      " + path)
+				fmt.Println("      " + path)
 			}
 			return nil
 		})
@@ -146,5 +147,5 @@ func listContent(stringPath string) {
 }
 
 func helperFunc() {
-	println("\nEx: use sammy...")
+	fmt.Println("\nEx: use sammy...")
 }
