@@ -11,9 +11,12 @@ import (
 )
 
 func main() {
-
 	command := os.Args
+	proceedCommand(command)
+}
 
+//proceedCommand will check for given arguments and execute the appropriate operation
+func proceedCommand(command []string) {
 	if len(command) > 1 {
 		switch command[1] {
 		case "help":
