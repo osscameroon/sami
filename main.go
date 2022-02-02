@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -21,6 +22,7 @@ func main() {
 			helperFunc()
 		case "deploy":
 			if len(command) > 2 {
+				fmt.Println("[-] sammy deploy command... ")
 				deploy(command[2])
 			} else {
 				throwError("No Directory provided !", 1)
@@ -45,11 +47,16 @@ func main() {
 func throwError(err string, statusCode int) {
 	fmt.Printf("[x] Error: %s", err)
 	fmt.Println()
+
+	if statusCode == 1 {
+		log.Fatal(err)
+	} else if statusCode == 0 {
+		log.Println(err)
+	}
 	os.Exit(statusCode)
 }
 
 func deploy(dir string) {
-	fmt.Println("[-] sammy deploy command... ")
 	fmt.Printf("Deploying %s\n", dir)
 	if _, err := os.Stat(dir); err != nil {
 		if os.IsNotExist(err) {
