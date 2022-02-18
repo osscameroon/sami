@@ -69,7 +69,7 @@ The infrastructure consists of these components:
 - An instance of [Webhook](https://github.com/adnanh/webhook).
 - A [Swarm](https://docs.docker.com/engine/swarm/) cluster which is where application will be run and scheduled.
 
-![image](/Users/elhmn/Downloads/structurizr-1-Infrastructure\ \(1\).png)
+![image](./res/imgs/structurizr-1-Infrastructure.png)
 *Infrastructure*
 
 ### GitHub Repository
