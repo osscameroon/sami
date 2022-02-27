@@ -29,7 +29,7 @@ This repository contains `CI` workflows that interacts with the **Artifact Manag
 
 ## Artifact Managment System
 
-The **Artifact Managment System** is responsible for the creation, storage of your artifacts,
+The **Artifact Managment System** is responsible for the creation and storage of your artifacts,
  this is also where we can request the deployment of an artifact to any environment.
 
 In the case of an application packaged as a **docker image**,
@@ -42,16 +42,16 @@ In the case of an application packaged as a **docker image**,
 
 
 ![image](./res/imgs/structurizr-1-AMS-Containers.png)
-*Artifact Managment  System Containers*
+*Artifact Managment System Containers*
 
 ### CI Artifact creation
-The Artifact creation CI is a reusable [GitHub Action](https://github.com/features/actions) that creates your artifacts, tags it and pushes it to an Artifact Registry.
-For a docker image that action will create the image and push it either on the [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry) or to [DockerHub](https://hub.docker.com/)
+The Artifact creation CI workdlow is a reusable [GitHub Action](https://github.com/features/actions) that creates your artifacts, tags them and pushes them to an Artifact Registry.
+For a docker image that action will create an image and push it either on the [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry) or to [DockerHub](https://hub.docker.com/)
 
 *Note: we have  built an Artifact Creation workflow [here](https://github.com/osscameroon/camerdevs/blob/682256603a8bd3cb58752a66e81ce36b37a1e6d6/.github/workflows/backend-build-api-image.yaml#L41)*
 
 ### Artifact Registry
-An artifact registry designate the place your artifacts are being stored. For docker images it can be a container registry and for static files can be an s3 bucket.
+An artifact registry designates the place your artifacts are being stored. For docker images it can be a container registry and for static files can be an s3 bucket.
 
 
 ### CI Artifact deployment request
@@ -61,7 +61,7 @@ This CI integration is a reusable [GitHub Action](https://github.com/features/ac
 
 ## Infrastructure
 
-The application you build and package need to run on an infrastructure. The infrasture is a set of several components that allow us deploy, run, monitor and observe our applications/services.
+The application you build and package needs to run on an infrastructure. The infrastructure is a set of several components that allow us deploy, run and observe our applications.
 
 The infrastructure consists of these components:
 
@@ -78,12 +78,12 @@ This repository also contains few **CI workflows** that will update your artifac
 and/or trigger an api call to the **Webhook** that will trigger the actual deployment on your swarm clusters.
 
 **Examples:**
-- CI Updating the artifact sha in your manifest can found [here](https://github.com/osscameroon/deployments/blob/main/.github/workflows/deploy-service.yaml)
+- CI Updating the artifact sha in your manifest can be found [here](https://github.com/osscameroon/deployments/blob/main/.github/workflows/deploy-service.yaml)
 - CI making the api call to the webhook can be found [here](https://github.com/osscameroon/deployments/blob/main/.github/workflows/apply-config.yaml)
 
 #### Deployment folder structure
 The deployment folder should follow a very strict structure and contain a `sami.yaml` file
-that describe your service's deployment.
+that describes your service's deployment.
 
 ##### Folder
 
@@ -94,18 +94,17 @@ At the root of the [deployments folder](https://github.com/osscameroon/deploymen
 
 You can find these folder:
 
-- `conf` folder container configuration for applications running on the VPS such as `nginx`.
 - `services` which contains a list of services.
 Each service folder name should match the name of your service otherwise the `sami-cli` won't be able to pick them up correctly.
-- `README.md` that should contain a description of the deployments folder.
+- `README.md` that should contain a description of the deployment's folder.
 
 
 ###### L1 - service_name
-Inside the `services/<service_name>/` folder are contained folders named after the type of deployment you want to perform
-The supported type of deployment can be `swarm`, `compose`, `k8s`, `cron`, `static_file` etc...
+Inside the `services/<service_name>/` folder can be found folders named after the type of deployment you want to perform
+The supported types of deployment can be `swarm`, `compose`, `k8s`, `cron`, `static_file` etc...
 
 ###### L2 - deployment_type
-The `services/<service_name>/<deployment_type>/` folder contain a folder named
+The `services/<service_name>/<deployment_type>/` folder contains a folder named
 after the environment you want your application to be deployed to.
 The supported environment are `stage`, `production`, `pull_request`.
 
@@ -145,7 +144,7 @@ a `sami.(yaml|yml)` file that describes the service we would like to deploy.
                 └── prometheus-stack.yml
 ```
 
-##### Sami's file
+##### Sam yaml file
 
 the `sami.(yaml|yml)` file describes the service we want to deploy.
 The file is picked up and used by the `sami-cli` in order the deploy the application on our infrastructure.
@@ -157,6 +156,7 @@ version: v1beta
 
 service_name: "camerdevs"
 type: "swarm"
+pr_deploy: true #is set to false by default
 
 #This description is not exhaustive and will be enriched as we design
 #the system
@@ -169,14 +169,13 @@ The [webhook](https://github.com/adnanh/webhook) is a peice of software that run
 This webhook will receive endpoint https **POST** or **GET** request on the `/deployment_request` endpoint
 and deploy your application on the cluster using the `sami-cli`.
 
-
 ### Swarm
 
 [Swarm](https://docs.docker.com/engine/swarm/) is our scheduler, we choose to use it because it runs well on low resources VPS.
-Which makes it very good for developers or teams without too much resources.
+Which makes it great for developers or teams without too much resources.
 We deploy a series of services on our swarm clusters for observability and monitoring.
 - Portainer
 - Prometheus
 - Grafana
 
-But also [Traefik](https://traefik.io/) a reverse proxy that will proxy our requests to the services running on swarm.
+But also [Traefik](https://traefik.io/) a reverse proxy that will proxy our requests to the services running on **swarm**.
