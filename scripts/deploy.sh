@@ -24,7 +24,10 @@ ls $DEPLOY_CONF_DIR
 
 #update the repository
 cd $DEPLOY_SERVICE_DIR
+git stash
+git config --global user.name "osscameroon-bot"
 git pull --rebase origin main
+git stash apply
 cd -
 
 echo "Start deployment..."
@@ -38,9 +41,9 @@ echo "DOCKER_STACK:"
 echo "$DOCKER_STACK_FILES"
 
 for file in $DOCKER_COMPOSE_FILES; do
-	docker-compose -f "$file" up -d
+	docker-compose -f "$file" up -d &
 done
 
 for file in $DOCKER_STACK_FILES; do
-	docker stack deploy -c "$file" $(echo "$file" | cut -d "/" -f 2)
+	docker stack deploy  --with-registry-auth -c "$file" $(echo "$file" | cut -d "/" -f 2)
 done
