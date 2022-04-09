@@ -24,10 +24,8 @@ ls $DEPLOY_CONF_DIR
 
 #update the repository
 cd $DEPLOY_SERVICE_DIR
-git stash
 git config --global user.name "osscameroon-bot"
 git pull --rebase origin main
-git stash apply
 cd -
 
 echo "Start deployment..."
