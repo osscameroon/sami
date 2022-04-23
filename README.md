@@ -3,4 +3,4 @@
 Is our artifact management system
 
 
-Find out more about the [Architechture](./Architecture.md).
+Find out more about the [Architecture](./Architecture.md).
