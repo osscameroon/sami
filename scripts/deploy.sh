@@ -43,5 +43,9 @@ for file in $DOCKER_COMPOSE_FILES; do
 done
 
 for file in $DOCKER_STACK_FILES; do
-	docker stack deploy  --with-registry-auth -c "$file" $(echo "$file" | cut -d "/" -f 2)
+	echo file: $file
+	name=$(echo "$file" | cut -d "/" -f 2)
+	env=$(echo "$file" | cut -d "/" -f 4)
+	name="${env}_${name}"
+	docker stack deploy  --with-registry-auth -c "$file" "$name"
 done
