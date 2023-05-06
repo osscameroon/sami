@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 USAGE="./deploy.sh <deploment_directory>
 Example: ./deploy.sh /Users/user_name/deployments
 The deploment_directory should not end with a \"/\""
@@ -14,9 +16,7 @@ fi
 SERVICE_DIR="services"
 CONF_DIR="conf"
 DEPLOY_SERVICE_DIR=$DEPLOY_DIR/$SERVICE_DIR
-DEPLOY_CONF_DIR=$DEPLOY_DIR/$CONF_DIR
 
-echo "DEPLOY_CONF_DIR: $DEPLOY_CONF_DIR"
 echo "DEPLOY_SERVICE_DIR: $DEPLOY_SERVICE_DIR"
 
 ls $DEPLOY_SERVICE_DIR
@@ -25,7 +25,7 @@ ls $DEPLOY_CONF_DIR
 #update the repository
 cd $DEPLOY_SERVICE_DIR
 git config --global user.name "osscameroon-bot"
-git pull --rebase origin main
+git pull --rebase https://$GITHUB_TOKEN@github.com/osscameroon/deployments main
 cd -
 
 echo "Start deployment..."
