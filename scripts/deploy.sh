@@ -25,7 +25,11 @@ ls $DEPLOY_CONF_DIR
 #update the repository
 cd $DEPLOY_SERVICE_DIR
 git config --global user.name "osscameroon-bot"
-git pull --rebase https://$GITHUB_TOKEN@github.com/osscameroon/deployments main
+
+#get repo url takes a `  Fetch URL: git@github.com:elhmn/infra.git`
+#and returns `@github.com/elhmn/infra.git`
+REPO_PATH=$(git remote show origin | grep Fetch | cut -d ":" -f 2- | tr -d " " | tr -s ":" "/" | sed -s "s/^git//g")
+git pull --rebase https://$GITHUB_TOKEN$REPO_PATH main
 cd -
 
 echo "Start deployment..."
@@ -39,7 +43,7 @@ echo "DOCKER_STACK:"
 echo "$DOCKER_STACK_FILES"
 
 for file in $DOCKER_COMPOSE_FILES; do
-	docker-compose -f "$file" up -d &
+	sudo docker-compose -f "$file" up -d &
 done
 
 for file in $DOCKER_STACK_FILES; do
@@ -47,5 +51,5 @@ for file in $DOCKER_STACK_FILES; do
 	name=$(echo "$file" | cut -d "/" -f 2)
 	env=$(echo "$file" | cut -d "/" -f 4)
 	name="${env}_${name}"
-	docker stack deploy  --with-registry-auth -c "$file" "$name"
+	sudo docker stack deploy  --with-registry-auth -c "$file" "$name"
 done
