@@ -28,7 +28,7 @@ git config --global user.name "osscameroon-bot"
 
 #get repo url takes a `  Fetch URL: git@github.com:elhmn/infra.git`
 #and returns `@github.com/elhmn/infra.git`
-REPO_PATH=$(git remote show origin | grep Fetch | cut -d ":" -f 2- | tr -d " " | tr -s ":" "/" | sed -s "s/^git//g")
+REPO_PATH=$(git remote show origin | grep Fetch | sed -E 's#^.*(git@|https://)([^/]+)/(.*)$#@\2:\3#;s#:#/#g')
 git pull --rebase https://$GITHUB_TOKEN$REPO_PATH main
 cd -
 
