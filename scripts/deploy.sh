@@ -26,10 +26,17 @@ ls $DEPLOY_CONF_DIR
 cd $DEPLOY_SERVICE_DIR
 git config --global user.name "osscameroon-bot"
 
-#get repo url takes a `  Fetch URL: git@github.com:elhmn/infra.git`
-#and returns `@github.com/elhmn/infra.git`
-REPO_PATH=$(git remote show origin | grep Fetch | sed -E 's#^.*(git@|https://)([^/]+)/(.*)$#@\2:\3#;s#:#/#g')
-git pull --rebase https://$GITHUB_TOKEN$REPO_PATH main
+if [ ! -z "$GITHUB_TOKEN" ]; then
+	#get repo url takes a `  Fetch URL: git@github.com:elhmn/infra.git`
+	#and returns `@github.com/elhmn/infra.git`
+	REPO_PATH=$(git remote show origin | grep Fetch | sed -E 's#^.*(git@|https://)([^/]+)/(.*)$#@\2:\3#;s#:#/#g')
+	git pull --rebase https://$GITHUB_TOKEN$REPO_PATH main
+else
+	#get repo url takes a `  Fetch URL: git@github.com:elhmn/infra.git`
+	#and returns `@github.com:elhmn/infra.git`
+	REPO_PATH=$(git remote show origin | grep Fetch | sed -E 's#^.*(git@|https://)([^/]+)/(.*)$#@\2/\3#')
+	git pull --rebase git$REPO_PATH
+fi
 cd -
 
 echo "Start deployment..."
