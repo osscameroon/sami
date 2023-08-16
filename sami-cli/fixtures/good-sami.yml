@@ -1,0 +1,12 @@
+version: v1beta
+
+
+service_name: "camerdevs"
+type: "swarm"
+files:
+ - ./stack.yaml
+
+oob:
+ - update-image:
+   file: "./stack.yaml"
+   path: ".services.frontend.image"
