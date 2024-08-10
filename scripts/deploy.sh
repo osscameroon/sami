@@ -49,8 +49,14 @@ DOCKER_STACK_FILES="$(find . -regex ".*-stack\.\(yml\|yaml\)")"
 echo "DOCKER_STACK:"
 echo "$DOCKER_STACK_FILES"
 
+# make sure that we add the user to the docker group
+sudo usermod -aG docker $USER
+
 for file in $DOCKER_COMPOSE_FILES; do
-	sudo docker-compose -f "$file" up -d &
+	name=$(echo "$file" | cut -d "/" -f 2)
+	env=$(echo "$file" | cut -d "/" -f 4)
+	name="${env}_${name}"
+	sudo docker compose -f "$file" -p "$name" up -d
 done
 
 for file in $DOCKER_STACK_FILES; do
@@ -58,5 +64,5 @@ for file in $DOCKER_STACK_FILES; do
 	name=$(echo "$file" | cut -d "/" -f 2)
 	env=$(echo "$file" | cut -d "/" -f 4)
 	name="${env}_${name}"
-	sudo docker stack deploy  --with-registry-auth -c "$file" "$name"
+	sudo docker stack deploy  --with-registry-auth -c "$file" "$name" --detach=true
 done
