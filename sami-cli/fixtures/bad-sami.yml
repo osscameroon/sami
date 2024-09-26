@@ -1,0 +1,12 @@
+
+
+service_name: "camerdevs"
+type: "swarm"
+
+files:
+ - ./stack.yaml
+
+oob:
+ - update-image:
+   file: "./stack.yaml"
+   zigzag: 1
