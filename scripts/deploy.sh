@@ -27,9 +27,10 @@ cd $DEPLOY_SERVICE_DIR
 git config --global user.name "osscameroon-bot"
 
 if [ ! -z "$GITHUB_TOKEN" ]; then
+	USER=apps
 	#get repo url takes a `  Fetch URL: git@github.com:elhmn/infra.git`
 	#and returns `@github.com/elhmn/infra.git`
-	REPO_PATH=$(git remote show origin | grep Fetch | sed -E 's#^.*(git@|https://)([^/]+)/(.*)$#@\2:\3#;s#:#/#g')
+	REPO_PATH=$(git remote -v | grep "origin.*(fetch)" | sed -E 's#^.*(git@|https://)([^/]+)/(.*) \(fetch\)$#@\2:\3#;s#:#/#g')
 	git pull --rebase https://$GITHUB_TOKEN$REPO_PATH main
 else
 	#get repo url takes a `  Fetch URL: git@github.com:elhmn/infra.git`
